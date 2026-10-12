@@ -1,0 +1,23 @@
+PixelMplus12 (PixelMplus12-Regular.woff2, PixelMplus12-Bold.woff2)
+
+PixelMplus12 is an outline conversion of M+ BITMAP FONTS by itouhiro.
+Source: https://github.com/itouhiro/PixelMplus
+These files are the web (woff2) builds served by the Phantom Siita official
+homepage, redistributed here under the licence below.
+
+The font files are used as-is and are NOT modified by this project.
+
+--------------------------------------------------------------------------
+M+ FONTS                                Copyright (C) 2002-2013 M+ FONTS PROJECT
+
+-
+
+LICENSE_E
+
+These fonts are free software.
+Unlimited permission is granted to use, copy, and distribute them, with
+or without modification, either commercially or noncommercially.
+THESE FONTS ARE PROVIDED "AS IS" WITHOUT WARRANTY.
+
+http://mplus-fonts.sourceforge.jp/mplus-outline-fonts/
+--------------------------------------------------------------------------

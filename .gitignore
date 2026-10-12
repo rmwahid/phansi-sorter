@@ -1,0 +1,11 @@
+# Tool state written by the editor/agent environment, never part of the app.
+.mimosa/
+
+# Not a node project at runtime (no dependencies), but keep npm artefacts out.
+node_modules/
+npm-debug.log*
+
+# OS noise.
+.DS_Store
+Thumbs.db
+desktop.ini

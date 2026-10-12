@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>OG card generator · PhansiSorter</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      body {
+        background: #111;
+        color: #eee;
+        font-family: monospace;
+        padding: 16px;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        max-width: 900px;
+        border: 1px solid #555;
+        margin-bottom: 12px;
+      }
+      a {
+        color: #cfdfe6;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Renders the social preview image (1200x630) used by og:image.
+         Regenerate with: npm run serve, open tools/og-card.html and save the
+         canvas as assets/social/og-card.png (right click, or use the link). -->
+    <h1>OG card generator</h1>
+    <p>
+      Right click the canvas and "Save image as..." to
+      <code>assets/social/og-card.jpg</code>, or use the
+      <a id="download" download="og-card.jpg" href="#">download link</a>.
+      JPEG keeps the file around 200 KB, which keeps link previews fast.
+    </p>
+    <canvas id="card" width="2400" height="1260"></canvas>
+
+    <script type="module">
+      import { songs } from "../js/data/songs.js";
+
+      const W = 1200;
+      const H = 630;
+      const SCALE = 2;
+      const FONT = '"PixelMplus12", "MS Gothic", "Yu Gothic", monospace';
+
+      const load = (src) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(null);
+          img.src = src;
+        });
+
+      const tint = (img, color) => {
+        if (!img) return null;
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const cx = c.getContext("2d");
+        cx.drawImage(img, 0, 0);
+        cx.globalCompositeOperation = "source-in";
+        cx.fillStyle = color;
+        cx.fillRect(0, 0, c.width, c.height);
+        return c;
+      };
+
+      const fit = (img, boxW, boxH) => {
+        const ratio = Math.min(boxW / img.width, boxH / img.height);
+        return { w: img.width * ratio, h: img.height * ratio };
+      };
+
+      const draw = (ctx, img, cx, cy, boxW, boxH) => {
+        if (!img) return { w: 0, h: 0 };
+        const { w, h } = fit(img, boxW, boxH);
+        ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+        return { w, h };
+      };
+
+      const main = async () => {
+        await document.fonts.ready;
+        const [wordmark, wide, tall, pattern] = await Promise.all([
+          load("../assets/logo/phantomsiita-wordmark.svg"),
+          load("../assets/logo/phantomsiita-butterfly-01.svg"),
+          load("../assets/logo/phantomsiita-butterfly-02.svg"),
+          load("../assets/logo/phantomsiita-pattern.png"),
+        ]);
+
+        const canvas = document.getElementById("card");
+        const ctx = canvas.getContext("2d");
+        ctx.scale(SCALE, SCALE);
+        ctx.textBaseline = "alphabetic";
+
+        const PAPER = "#edcfcf";
+        const RED = "#600e0e";
+        const SALMON = "#fc8e8e";
+
+        // Maroon backdrop with the official paper pattern, like the page.
+        ctx.fillStyle = RED;
+        ctx.fillRect(0, 0, W, H);
+        if (pattern) {
+          const tile = document.createElement("canvas");
+          tile.width = pattern.naturalWidth;
+          tile.height = pattern.naturalHeight;
+          const tctx = tile.getContext("2d");
+          tctx.drawImage(pattern, 0, 0);
+          tctx.globalCompositeOperation = "source-in";
+          tctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+          tctx.fillRect(0, 0, tile.width, tile.height);
+          const pat = ctx.createPattern(tile, "repeat");
+          ctx.save();
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = pat;
+          ctx.fillRect(0, 0, W, H);
+          ctx.restore();
+        }
+
+        // Pixel frame.
+        ctx.strokeStyle = PAPER;
+        ctx.lineWidth = 4;
+        ctx.strokeRect(24, 24, W - 48, H - 48);
+        ctx.strokeStyle = "rgba(237, 207, 207, 0.35)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(34.5, 34.5, W - 69, H - 69);
+
+        // Butterflies drifting in the free corners.
+        draw(ctx, tint(wide, "rgba(252, 142, 142, 0.85)"), 210, 470, 240, 150);
+        draw(ctx, tint(tall, "rgba(252, 142, 142, 0.7)"), 1000, 150, 150, 150);
+
+        // Wordmark.
+        draw(ctx, tint(wordmark, "#ffffff"), W / 2, 210, 520, 88);
+
+        const spaced = (text, y, size, spacing, color, weight) => {
+          ctx.font = `${weight || 400} ${size}px ${FONT}`;
+          ctx.fillStyle = color;
+          const widths = [...text].map((ch) => ctx.measureText(ch).width);
+          const total = widths.reduce((sum, w) => sum + w, 0) + spacing * Math.max(0, text.length - 1);
+          let x = (W - total) / 2;
+          for (let i = 0; i < text.length; i += 1) {
+            ctx.fillText(text[i], x, y);
+            x += widths[i] + spacing;
+          }
+        };
+
+        spaced("SONG SORTER", 320, 40, 10, SALMON, 700);
+        spaced(`${songs.length} SONGS · RANK THE DISCOGRAPHY BY TASTE`, 380, 22, 3, PAPER);
+        spaced("ONE COMPARISON AT A TIME", 420, 18, 3, "rgba(237, 207, 207, 0.7)");
+
+        // A little ticket stub hint at the bottom.
+        ctx.strokeStyle = "rgba(237, 207, 207, 0.5)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 8]);
+        ctx.beginPath();
+        ctx.moveTo(120, 490);
+        ctx.lineTo(W - 120, 490);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        spaced("A / B  VOTING · RESUME ANYTIME · RECEIPT EXPORT", 535, 18, 4, PAPER);
+
+        const href = canvas.toDataURL("image/jpeg", 0.9);
+        document.getElementById("download").href = href;
+      };
+
+      main();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phantom Siita Song Sorter</title>
+    <meta
+      name="description"
+      content="Song sorter for Phantom Siita: pick the songs, answer one-on-one comparisons and get a full ranking."
+    />
+    <!-- Link preview (Discord, X, Slack, ...). Crawlers ignore relative image
+         URLs, so og:image and twitter:image are rewritten to absolute ones by
+         `node tools/set-og-url.mjs <base-url>` right before deploying, and again
+         whenever the domain changes. -->
+    <meta name="theme-color" content="#600e0e" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PhansiSorter" />
+    <meta property="og:title" content="Phantom Siita Song Sorter" />
+    <meta
+      property="og:description"
+      content="Rank the Phantom Siita discography: pick the songs, answer one comparison at a time, get a full ranking."
+    />
+    <meta property="og:image" content="assets/social/og-card.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Phantom Siita Song Sorter title card" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Phantom Siita Song Sorter" />
+    <meta
+      name="twitter:description"
+      content="Rank the Phantom Siita discography: pick the songs, answer one comparison at a time, get a full ranking."
+    />
+    <meta name="twitter:image" content="assets/social/og-card.jpg" />
+    <!-- Analytics. Tracking stays off until the website id is filled in: with an
+         empty id nothing is loaded and no request leaves the page, so local
+         development stays offline. The script URL is the shared Umami instance
+         (the same one the reference sorter uses); every website registered there
+         gets its own id and its own statistics, and the id is what the tracker
+         reports to, so the deployed domain never has to be known in advance. -->
+    <meta name="umami-script-url" content="https://anal.bokuao-playground.com/script.js" />
+    <meta name="umami-website-id" content="" />
+    <link rel="icon" href="assets/pixel/heart.svg" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body class="mode-red">
+    <!-- Entry gate: shown once per browser session. -->
+    <div id="intro" class="intro" hidden>
+      <div id="intro-slot" class="intro__inner"></div>
+    </div>
+
+    <div id="app" hidden>
+      <div class="page">
+        <header class="site-header">
+          <div class="site-header__inner">
+            <a class="brand" id="brand" href="#/">
+              <img
+                class="brand__logo"
+                src="assets/logo/phantomsiita-wordmark.svg"
+                alt="Phantom Siita"
+              />
+              <span class="brand__tool">song sorter</span>
+            </a>
+            <span class="site-header__spacer"></span>
+            <div class="header-control">
+              <span>mode:</span>
+              <span class="mode-dots">
+                <button
+                  type="button"
+                  class="mode-dot mode-dot--red"
+                  data-mode="red"
+                  aria-pressed="true"
+                  title="red mode"
+                ></button>
+                <button
+                  type="button"
+                  class="mode-dot mode-dot--black"
+                  data-mode="black"
+                  aria-pressed="false"
+                  title="black mode"
+                ></button>
+              </span>
+            </div>
+          </div>
+
+          <!-- Red drip hanging from the header, black mode only, exactly like
+               the official header decoration. -->
+          <div class="drop" aria-hidden="true">
+            <img src="assets/logo/phantomsiita-drop.svg" alt="" />
+          </div>
+        </header>
+
+        <main id="view"></main>
+      </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "phansi-sorter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fan-made Phantom Siita song sorter. Static site, no runtime dependencies.",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "test": "node --test",
+    "assets": "node tools/gen-pixel-assets.mjs"
+  }
+}
