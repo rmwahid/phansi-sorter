@@ -1,18 +1,26 @@
 // Song catalogue for the Phantom Siita song sorter.
 //
-// Every entry was taken from the official homepage on 2026-10-12:
+// Every entry was taken from the official homepage on 2026-10-12, then the
+// international titles were cross-checked against the label's international
+// catalogue (MusicBrainz, which mirrors the global release metadata):
 //   - `japanese`  : title exactly as printed on the official discography and
 //                   music video news entries
-//   - `romaji`    : how the Japanese title is read. The official site does not
-//                   publish readings, so these are transcriptions (kana titles
-//                   are exact; kanji titles use their standard reading).
-//                   `輪廻る` is the one reading that could not be checked
-//                   against any official source, so treat it as a best guess.
-//   - `english`   : the official English title shown on the same pages; "" when
-//                   the official site has no English rendering yet. Where the
-//                   official English title is just the romaji again (for
-//                   example おともだち -> "Otomodachi"), the UI shows a single
-//                   line instead of repeating itself.
+//   - `romaji`    : how the Japanese title is read. Neither the official site
+//                   nor the global catalogue publishes readings, so these are
+//                   transcriptions (kana titles are exact; kanji titles use
+//                   their standard reading). `輪廻る` is read "Meguru": the
+//                   official music video and the streaming catalogues only ever
+//                   print the kanji, and 巡る ("to go around") is the reading the
+//                   title plays on. Keep this in sync if the label ever
+//                   publishes an official romanisation.
+//   - `english`   : the international title used by the label's releases (for
+//                   example すき、きらい -> "Love, Hate", そっくりさん ->
+//                   "Doppelganger" on the "Love, Hate" EP). The English text on
+//                   the official homepage is a machine translation (WOVN) and is
+//                   deliberately NOT used as a title. "" when no international
+//                   title exists. Where the international title is just the
+//                   romaji again (おともだち -> "Otomodachi"), the UI shows a
+//                   single line instead of repeating itself.
 //   - `released`  : release date (digital release date, or disc release date
 //                   for the CD singles)
 //   - `type`      : kept for reference only (`album`, `single`, `coupling`);
@@ -119,7 +127,7 @@ export const songs = [
     id: "suki-kirai",
     japanese: "すき、きらい",
     romaji: "Suki, Kirai",
-    english: "I Like It, I Dislike It",
+    english: "Love, Hate",
     released: "2025-07-09",
     type: "single",
     origin: "Major debut single A-side",
@@ -131,7 +139,7 @@ export const songs = [
     id: "sukkuri-san",
     japanese: "そっくりさん",
     romaji: "Sukkuri-san",
-    english: "Look-alike",
+    english: "Doppelganger",
     released: "2025-07-09",
     type: "coupling",
     origin: "Major debut single coupling",
@@ -202,7 +210,7 @@ export const songs = [
   {
     id: "rinneru",
     japanese: "輪廻る",
-    romaji: "Rinneru",
+    romaji: "Meguru",
     english: "",
     released: "2026-08-01",
     type: "single",
